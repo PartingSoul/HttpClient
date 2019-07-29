@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release' // 新增
+
+def libraryVersion = "1.0.0-alpha"
 
 android {
     compileSdkVersion 28
@@ -8,7 +11,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName libraryVersion
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -21,6 +24,18 @@ android {
         }
     }
 
+    //解决 JavaDoc 中文注释生成失败的问题
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+        options.addStringOption('charSet', 'UTF-8')
+    }
+
+    lintOptions {
+        abortOnError false // 即使有报错也不会停止打包
+        checkReleaseBuilds false // 打包Release版本的时候也不进行Lint检测
+    }
+
 }
 
 dependencies {
@@ -30,4 +45,33 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+//task to delete the old jar
+task deleteOldJar(type: Delete) {
+    delete 'release/httpclient.jar'
+}
+
+//task to export contents as jar
+task exportJar(type: Copy) {
+    from('build/intermediates/full_jar/release/createFullJarRelease/')
+    into('release/')
+    include('full.jar')
+    ///Rename the jar
+    rename('full.jar', 'httpclient.jar')
+}
+
+def siteUrl = "https://github.com/PartingSoul/HttpUtils"  //github主页
+publish {
+    repoName = 'tool'//远程仓库名字,不指明，默认是上传到maven
+    userOrg = 'partingsoul'//bintray.com的用户名
+    groupId = 'com.parting_soul.http'//一个唯一值，默认包名,生成的gradle依赖前缀
+    artifactId = 'httpclient'//远程仓库包名称
+    publishVersion = libraryVersion//版本号
+    desc = '网络框架'//描述，不重要
+    website = siteUrl//引用github主页
 }

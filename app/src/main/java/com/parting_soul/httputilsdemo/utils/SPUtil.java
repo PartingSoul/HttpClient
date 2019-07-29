@@ -1,7 +1,9 @@
-package com.parting_soul.httputilsdemo;
+package com.parting_soul.httputilsdemo.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.parting_soul.httputilsdemo.App;
 
 
 /**

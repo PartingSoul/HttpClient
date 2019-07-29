@@ -66,14 +66,15 @@ public final class Response {
         this.error = error;
     }
 
-    public Response() {
-    }
-
     public static Response create(byte[] data, String charset) {
         return new Response(data, charset);
     }
 
     public static Response create(int code, String error) {
         return new Response(code, error);
+    }
+
+    public boolean isSuccess() {
+        return code == HttpURLConnection.HTTP_OK;
     }
 }

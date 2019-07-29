@@ -9,7 +9,7 @@ import java.util.Map;
  * @author parting_soul
  * @date 2019-07-23
  */
-public class MultipartRequest extends BaseRequest<MultipartRequest> {
+public final class MultipartRequest extends BaseRequest<MultipartRequest> {
     private Map<String, FilePair> mFilePairs;
 
     public MultipartRequest(String url) {

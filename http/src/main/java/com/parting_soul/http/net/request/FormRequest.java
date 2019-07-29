@@ -6,7 +6,7 @@ package com.parting_soul.http.net.request;
  * @author parting_soul
  * @date 2019-07-23
  */
-public class FormRequest extends BaseRequest<FormRequest> {
+public final class FormRequest extends BaseRequest<FormRequest> {
 
     public FormRequest(String url) {
         super(url);

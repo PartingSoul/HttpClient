@@ -2,10 +2,8 @@ package com.parting_soul.http.net.request;
 
 import com.parting_soul.http.annotation.HttpMethodRule;
 import com.parting_soul.http.bean.FilePair;
-import com.parting_soul.http.bean.Response;
-import com.parting_soul.http.net.HttpCore;
 import com.parting_soul.http.net.HttpMethod;
-import com.parting_soul.http.net.OnRequestCallback;
+import com.parting_soul.http.net.OnHttpCallback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +16,7 @@ public abstract class BaseRequest<E extends BaseRequest> {
     private Map<String, Object> mParams;
     private Map<String, String> mHeaders;
     private String url;
-    private OnRequestCallback mRequestCallback;
+    private OnHttpCallback mOnHttpCallback;
     private String requestMethod = HttpMethod.GET;
 
     public BaseRequest(String url) {
@@ -128,23 +126,13 @@ public abstract class BaseRequest<E extends BaseRequest> {
         return (E) this;
     }
 
-    public OnRequestCallback getOnRequestCallback() {
-        return mRequestCallback;
+    public OnHttpCallback getOnHttpCallback() {
+        return mOnHttpCallback;
     }
 
-    public BaseRequest setOnRequestCallback(OnRequestCallback callback) {
-        this.mRequestCallback = callback;
+    public BaseRequest setOnHttpCallback(OnHttpCallback callback) {
+        this.mOnHttpCallback = callback;
         return this;
     }
-
-    /**
-     * 执行请求
-     */
-    public final void execute() {
-        Response response = HttpCore.request(this);
-        if (mRequestCallback != null) {
-            mRequestCallback.onResponse(response);
-        }
-    }
-
+    
 }
