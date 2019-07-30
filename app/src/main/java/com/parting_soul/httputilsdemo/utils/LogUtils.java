@@ -1,4 +1,4 @@
-package com.parting_soul.http.utils;
+package com.parting_soul.httputilsdemo.utils;
 
 import android.util.Log;
 

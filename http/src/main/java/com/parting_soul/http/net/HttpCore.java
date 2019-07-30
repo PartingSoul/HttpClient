@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.parting_soul.http.bean.Response;
+import com.parting_soul.http.net.exception.HttpRequestException;
 import com.parting_soul.http.net.params.BaseParamsOutputStrategy;
 import com.parting_soul.http.net.params.ParamsOutputStrategyFactory;
 import com.parting_soul.http.net.request.BaseRequest;
@@ -24,15 +25,14 @@ import java.util.Map;
  * @date 2019-07-22
  */
 public class HttpCore {
-    public static int CONNECTION_TIMEOUT = 10000;
-    public static int READ_SOCKET_TIMEOUT = 10000;
 
     /**
      * get 请求
      *
+     * @param httpConfig
      * @param request
      */
-    public static Response get(@NonNull BaseRequest request) {
+    public static Response get(HttpConfig httpConfig, @NonNull BaseRequest request) throws HttpRequestException {
         Response response;
         BufferedInputStream bufferedInputStream = null;
         ByteArrayOutputStream bos = null;
@@ -53,8 +53,8 @@ public class HttpCore {
             URL url = new URL(requestUrl);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(HttpMethod.GET);
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-            connection.setReadTimeout(READ_SOCKET_TIMEOUT);
+            connection.setConnectTimeout(httpConfig.getConnectionTimeout());
+            connection.setReadTimeout(httpConfig.getReadSocketTimeout());
             connection.setDoInput(true);
 
             //设置header
@@ -81,18 +81,16 @@ public class HttpCore {
 
                 response = Response.create(bos.toByteArray(), UrlUtils.UTF_8);
             } else {
-                response = Response.create(responseCode, responseMessage);
+                throw new HttpRequestException(responseCode, responseMessage);
             }
-
         } catch (Exception e) {
-            response = Response.create(-1, e.getMessage());
+            throw e instanceof HttpRequestException ? (HttpRequestException) e : new HttpRequestException(e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
             }
             FileUtils.closeQuietly(bufferedInputStream, bos);
         }
-
         return response;
     }
 
@@ -114,9 +112,10 @@ public class HttpCore {
     /**
      * post请求
      *
+     * @param httpConfig
      * @param request
      */
-    public static Response post(@NonNull BaseRequest request) {
+    public static Response post(HttpConfig httpConfig, @NonNull BaseRequest request) throws HttpRequestException {
         Response response;
         HttpURLConnection connection = null;
         OutputStream httpBos = null;
@@ -131,8 +130,8 @@ public class HttpCore {
             connection = (HttpURLConnection) url.openConnection();
             //设置请求方式
             connection.setRequestMethod(HttpMethod.POST);
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-            connection.setReadTimeout(READ_SOCKET_TIMEOUT);
+            connection.setConnectTimeout(httpConfig.getConnectionTimeout());
+            connection.setReadTimeout(httpConfig.getReadSocketTimeout());
             connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setUseCaches(false);
@@ -163,29 +162,29 @@ public class HttpCore {
                 }
                 response = Response.create(bos.toByteArray(), UrlUtils.UTF_8);
             } else {
-                response = Response.create(responseCode, responseMessage);
+                throw new HttpRequestException(responseCode, responseMessage);
             }
 
         } catch (Exception e) {
-            response = Response.create(-1, e.getMessage());
+            throw e instanceof HttpRequestException ? (HttpRequestException) e : new HttpRequestException(e);
         } finally {
+            FileUtils.closeQuietly(httpBis, httpBos, bos);
             if (connection != null) {
                 connection.disconnect();
             }
-            FileUtils.closeQuietly(httpBis, httpBos, bos);
         }
         return response;
     }
 
 
-    public static Response request(BaseRequest request) {
+    public static Response request(HttpConfig httpConfig, BaseRequest request) throws HttpRequestException {
         Response response;
         switch (request.getRequestMethod()) {
             case HttpMethod.GET:
-                response = get(request);
+                response = get(httpConfig, request);
                 break;
             default:
-                response = post(request);
+                response = post(httpConfig, request);
                 break;
         }
         return response;

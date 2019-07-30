@@ -1,4 +1,4 @@
-package com.parting_soul.httputilsdemo;
+package com.parting_soul.httputilsdemo.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

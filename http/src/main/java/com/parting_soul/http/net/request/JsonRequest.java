@@ -6,7 +6,7 @@ import java.util.Map;
  * @author parting_soul
  * @date 2019-07-23
  */
-public class JsonRequest extends BaseRequest<JsonRequest> {
+public final class JsonRequest extends BaseRequest<JsonRequest> {
     private String json;
 
     public JsonRequest(String url, String json) {
