@@ -245,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //及时切断任务
         mCompositeDisposable.dispose();
     }
 

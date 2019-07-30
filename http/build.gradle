@@ -58,11 +58,11 @@ task deleteOldJar(type: Delete) {
 
 //task to export contents as jar
 task exportJar(type: Copy) {
-    from('build/intermediates/full_jar/release/createFullJarRelease/')
+    from('./build/outputs/aar/')
     into('release/')
-    include('full.jar')
+    include('http-release.aar')
     ///Rename the jar
-    rename('full.jar', 'httpclient.jar')
+    rename('http-release.aar', 'httpclient.jar')
 }
 
 def siteUrl = "https://github.com/PartingSoul/HttpUtils"  //github主页
@@ -70,7 +70,7 @@ publish {
     repoName = 'tool'//远程仓库名字,不指明，默认是上传到maven
     userOrg = 'partingsoul'//bintray.com的用户名
     groupId = 'com.parting_soul.http'//一个唯一值，默认包名,生成的gradle依赖前缀
-    artifactId = 'httpclient'//远程仓库包名称
+    artifactId = 'httpClient'//远程仓库包名称
     publishVersion = libraryVersion//版本号
     desc = '网络框架'//描述，不重要
     website = siteUrl//引用github主页
