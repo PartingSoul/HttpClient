@@ -34,7 +34,7 @@ public class ThreadPoolManager {
     /**
      * 核心线程数
      */
-    private static final int CORE_POOL_SIZE = Math.max(2, Math.min(CPU_COUNT - 1, 4)) + 2;
+    private static final int CORE_POOL_SIZE = Math.max(2, Math.min(CPU_COUNT - 1, 4));
 
     /**
      * 最大线程数
