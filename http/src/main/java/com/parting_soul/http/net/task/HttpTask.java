@@ -96,13 +96,13 @@ public class HttpTask implements Runnable, TaskState, Disposable, Delayed {
 
     @Override
     public void onStart() {
-        if (!canCallback()) {
-            Log.d("HttpTask===>>callback ", "discard");
-            return;
-        }
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                if (!canCallback()) {
+                    Log.d("HttpTask===>>callback ", "discard");
+                    return;
+                }
                 mHttpCallback.onStart(HttpTask.this);
             }
         });
@@ -110,13 +110,13 @@ public class HttpTask implements Runnable, TaskState, Disposable, Delayed {
 
     @Override
     public void onSuccess(final Response response) {
-        if (!canCallback()) {
-            Log.d("HttpTask===>>callback ", "discard");
-            return;
-        }
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                if (!canCallback()) {
+                    Log.d("HttpTask===>>callback ", "discard");
+                    return;
+                }
                 mHttpCallback.onSuccess(response);
             }
         });
@@ -124,13 +124,13 @@ public class HttpTask implements Runnable, TaskState, Disposable, Delayed {
 
     @Override
     public void onFailed(final int code, final String error) {
-        if (!canCallback()) {
-            Log.d("HttpTask===>>callback ", "discard");
-            return;
-        }
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                if (!canCallback()) {
+                    Log.d("HttpTask===>>callback ", "discard");
+                    return;
+                }
                 mHttpCallback.onFailed(code, error);
             }
         });
