@@ -22,6 +22,9 @@ allprojects {
         maven {
             url "https://dl.bintray.com/partingsoul/tool"
         }
+        maven {
+            url "http://101.37.191.20:9091/repository/maven-releases/"
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release' // 新增
+apply plugin: 'maven'
 
 def libraryVersion = "1.0.2"
 
@@ -74,4 +75,38 @@ publish {
     publishVersion = libraryVersion//版本号
     desc = '网络框架'//描述，不重要
     website = siteUrl//引用github主页
+}
+
+/********/
+//Maven仓库的URL
+def MAVEN_REPO_RELEASE_URL = 'http://101.37.191.20:9091/repository/maven-releases/'
+def MAVEN_REPO_SNAPSHOT_URL = 'http://101.37.191.20:9091/repository/maven-snapshots/'
+
+// 对应maven的GroupId的值
+def GROUP = ''
+//登录nexus ossde的用户名
+
+def NEXUS_USERNAME = 'admin'
+//登录nexus oss的密码
+def NEXUS_PASSWORD = 'ecook123456'
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: MAVEN_REPO_SNAPSHOT_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.project {
+                version libraryVersion
+                artifactId 'http'
+                groupId 'com.admobile.foundation'
+                packaging 'aar'
+                description "网络库"
+            }
+        }
+    }
 }
