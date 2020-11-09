@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.parting_soul.http.bean.FilePair;
 import com.parting_soul.http.bean.Response;
+import com.parting_soul.http.net.HttpClient;
+import com.parting_soul.http.net.HttpCore;
 import com.parting_soul.http.net.OnHttpCallback;
 import com.parting_soul.http.net.disposables.CompositeDisposable;
 import com.parting_soul.http.net.disposables.Disposable;
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getImageByAsync() {
         final FormRequest request = new FormRequest("https://ww1.sinaimg.cn/large/0065oQSqly1g2hekfwnd7j30sg0x4djy.jpg");
+        request.addHeader("header", "12112");
         HttpManager.get(request, new OnHttpCallback() {
 
             @Override
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void postInfoBySync() {
-        final FormRequest request = new FormRequest("http://ip.tianqiapi.com/");
+        final FormRequest request = new FormRequest("https://api.ecook.cn/public/loginByMobileAndCode.shtml");
         request.addParam("ip", "27.193.13.255")
                 .addHeader("app", "app")
                 .addHeader("machine", "machine");
@@ -168,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            final Response response = HttpManager.get(request);
+                            final Response response = HttpManager.post(request);
                             mTvMsg.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -219,7 +222,8 @@ public class MainActivity extends AppCompatActivity {
         final MultipartRequest request = new MultipartRequest(Config.UPLOAD_IMG);
         request.addFilePair("avatarFile", new FilePair(PIC_PATH))
                 .addParam("nickname", "nickname" + Math.random())
-                .addParam("sex", 0);
+                .addParam("sex", 0)
+                .addHeader("eere", "dsds");
 
         HttpManager.post(request, new OnHttpCallback() {
 

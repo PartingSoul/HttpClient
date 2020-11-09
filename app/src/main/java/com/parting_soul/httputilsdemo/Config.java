@@ -5,7 +5,7 @@ package com.parting_soul.httputilsdemo;
  * @date 2019-07-23
  */
 public class Config {
-    public static final String BASE_URL = "xxxx";
+    public static final String BASE_URL = "https://www.github.com";
 
 
     public static final String UPLOAD_IMG = BASE_URL + "/user/update/user/info";

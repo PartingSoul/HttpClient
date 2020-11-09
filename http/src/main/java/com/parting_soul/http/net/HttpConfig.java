@@ -28,6 +28,11 @@ public class HttpConfig {
     private int READ_SOCKET_TIMEOUT = 10 * 1000;
 
     /**
+     * 信任所有证书
+     */
+    private boolean isTrustAllCertificate = false;
+
+    /**
      * 设置连接超时时间
      *
      * @param milliseconds
@@ -79,4 +84,11 @@ public class HttpConfig {
         return DEFAULT_RETRY_DELAY_TIME;
     }
 
+    public boolean isTrustAllCertificate() {
+        return isTrustAllCertificate;
+    }
+
+    public void setTrustAllCertificate(boolean trustAllCertificate) {
+        isTrustAllCertificate = trustAllCertificate;
+    }
 }

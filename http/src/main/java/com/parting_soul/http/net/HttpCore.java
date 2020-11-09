@@ -8,6 +8,7 @@ import com.parting_soul.http.net.exception.HttpRequestException;
 import com.parting_soul.http.net.params.BaseParamsOutputStrategy;
 import com.parting_soul.http.net.params.ParamsOutputStrategyFactory;
 import com.parting_soul.http.net.request.BaseRequest;
+import com.parting_soul.http.utils.AllowX509TrustManager;
 import com.parting_soul.http.utils.FileUtils;
 import com.parting_soul.http.utils.Headers;
 import com.parting_soul.http.utils.UrlUtils;
@@ -126,6 +127,9 @@ public class HttpCore {
 
         try {
             URL url = new URL(requestUrl);
+            if (httpConfig.isTrustAllCertificate()) {
+                AllowX509TrustManager.allowAllSSL();
+            }
             //得到connection对象。
             connection = (HttpURLConnection) url.openConnection();
             //设置请求方式
